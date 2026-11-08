@@ -1,0 +1,53 @@
+name: Render RAM Explainer MP4
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install system dependencies for audio generation
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-numpy python3-scipy ffmpeg
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Generate soundtrack
+        run: |
+          mkdir -p public/audio
+          python3 scripts/ram_soundtrack_gen.py
+          ls -lh public/audio/
+
+      - name: Render video with Remotion
+        run: |
+          npx remotion render src/index.ts RamExplainer out/ram-explainer.mp4 --log=verbose
+
+      - name: Upload MP4 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ram-explainer-mp4
+          path: out/ram-explainer.mp4
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Summary
+        run: |
+          echo "### Render complete ✅" >> $GITHUB_STEP_SUMMARY
+          ls -lh out/ram-explainer.mp4
+          echo "Download the MP4 from the **Artifacts** section of this workflow run." >> $GITHUB_STEP_SUMMARY

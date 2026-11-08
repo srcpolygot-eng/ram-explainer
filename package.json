@@ -1,0 +1,25 @@
+{
+  "name": "remotion-ram-explainer",
+  "version": "1.0.0",
+  "description": "What RAM actually does in your computer - 55s 3D Remotion Explainer (vertical short)",
+  "scripts": {
+    "start": "remotion preview",
+    "build": "remotion render src/index.ts RamExplainer out/ram-explainer.mp4",
+    "upgrade": "remotion upgrade",
+    "generate-audio": "python3 scripts/ram_soundtrack_gen.py"
+  },
+  "dependencies": {
+    "@react-three/fiber": "^8.16.0",
+    "@remotion/cli": "^4.0.200",
+    "@remotion/three": "^4.0.200",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "remotion": "^4.0.200",
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/three": "^0.160.0",
+    "typescript": "^5.3.0"
+  }
+}
