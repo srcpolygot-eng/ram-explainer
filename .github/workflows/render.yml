@@ -18,15 +18,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
 
       - name: Install system dependencies for audio generation
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3-numpy python3-scipy ffmpeg
+          sudo apt-get install -y python3-numpy python3-scipy
 
       - name: Install npm dependencies
-        run: npm ci
+        run: npm install
 
       - name: Generate soundtrack
         run: |
@@ -49,5 +48,5 @@ jobs:
       - name: Summary
         run: |
           echo "### Render complete ✅" >> $GITHUB_STEP_SUMMARY
-          ls -lh out/ram-explainer.mp4
+          ls -lh out/ram-explainer.mp4 || true
           echo "Download the MP4 from the **Artifacts** section of this workflow run." >> $GITHUB_STEP_SUMMARY
